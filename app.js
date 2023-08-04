@@ -1,16 +1,11 @@
 const express = require("express")
 const app = express()
 const cors = require("cors")
-const { createProxyMiddleware } = require('http-proxy-middleware');
+
 app.use(cors())
-app.use('/', createProxyMiddleware({
-  target: 'localhost:3232/', //original url
-  changeOrigin: true,
-  //secure: false,
-  onProxyRes: function (proxyRes, req, res) {
-    proxyRes.headers['Access-Control-Allow-Origin'] = '*';
-  }
-}));
+app.get('/', function (request, response) {
+  response.send('Hello World (Finally)');
+});
 
 app.use(express.json())
 const mongoose = require("mongoose")
