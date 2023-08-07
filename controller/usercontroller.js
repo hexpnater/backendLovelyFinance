@@ -87,14 +87,12 @@ exports.updatedata = async (req, res) => {
         const protocol = req.protocol;
         const host = req.hostname;
         const fullUrl = process.env.URL
-        console.log("#######3",process.env.URL)
+        console.log("#######3", process.env.URL)
         let update = await usermodel.findByIdAndUpdate(req.params.id, {
             mainHeading: mainHeading,
             secondHeading: secondHeading,
             innerText: innerText,
-            image: req.file ? fullUrl + "/" + "upload/" + req.file.filename :
-                findByid.image,
-
+            image: req.file ? req.file.filename : "",
         }, { new: true })
 
         await update.save()
