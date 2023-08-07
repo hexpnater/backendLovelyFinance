@@ -64,23 +64,22 @@ exports.geturldata = async (req, res) => {
     // }
     try {
 
-        const  response = await axios.get('https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', {
+        const response = await axios.get('https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', {
             headers: {
-              'X-CMC_PRO_API_KEY': 'b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c',
+                'X-CMC_PRO_API_KEY': 'b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c',
             },
-            params: {
-                limit: 10, // Number of cryptocurrencies to retrieve
-                convert: 'USD', // Convert prices to USD
-            },nested:true,
-          });
-
+            // params: {
+            //     limit: 10, // Number of cryptocurrencies to retrieve
+            //     convert: 'USD', // Convert prices to USD
+            // },
+        });
         const data = response.data.data;
         const formattedData = data.map((coin) => ({
             name: coin.name,
-            price: `${coin.quote.USD.priceChange}`,
-            priceChange: `${coin.quote.USD.percent_change_24hpriceChange}%`,
-            volume: `${coin.quote.USD.volume_24hpriceChange}`,
-            tvl: `${coin.quote.USD.total_supplypriceChange}`,
+            price: `${coin.quote.USD.price}`,
+            priceChange: `${coin.quote.USD.percent_change_1h}%`,
+            volume: `${coin.quote.USD.volume_24h}`,
+            //tvl: `${coin.quotes.volume}`,
         }));
 
         res.send({ status: true, message: "Successfully get data", details: formattedData })
@@ -99,7 +98,7 @@ exports.updatedata = async (req, res) => {
 
         const protocol = req.protocol;
         const host = req.hostname;
-        const fullUrl = `${protocol}://${host}`
+        const fullUrl = `http://18.168.154.7:3232`
 
         const update = await usermodel.findByIdAndUpdate(req.params.id, {
             mainHeading: mainHeading,
