@@ -87,7 +87,6 @@ exports.updatedata = async (req, res) => {
         const protocol = req.protocol;
         const host = req.hostname;
         const fullUrl = `http://18.168.154.7:3232`
-
         const update = await usermodel.findByIdAndUpdate(req.params.id, {
             mainHeading: mainHeading,
             secondHeading: secondHeading,
