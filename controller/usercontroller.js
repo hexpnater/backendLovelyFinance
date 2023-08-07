@@ -58,8 +58,8 @@ exports.updatedata = async (req, res) => {
 
         const protocol = req.protocol;
         const host = req.hostname;
-        const fullUrl = `${protocol}://${host}`
-
+       // const fullUrl = `${protocol}://${host}`
+       const fullUrl = `https://lovely-finance.onrender.com`
         const update = await usermodel.findByIdAndUpdate(req.params.id, {
             mainHeading: mainHeading,
             secondHeading: secondHeading,
