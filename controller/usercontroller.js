@@ -52,7 +52,7 @@ exports.deletedata = async (req, res) => {
 exports.geturldata = async (req, res) => {
     try {
 
-        const response = await axios.get('https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', {
+        const response = await axios.get(process.env.API_KEY_coinmarketcap, {
             headers: {
                 'X-CMC_PRO_API_KEY': 'b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c',
             },
@@ -86,8 +86,9 @@ exports.updatedata = async (req, res) => {
 
         const protocol = req.protocol;
         const host = req.hostname;
-        const fullUrl = `http://18.168.154.7:3232`
-        const update = await usermodel.findByIdAndUpdate(req.params.id, {
+        const fullUrl = process.env.URL
+        console.log("#######3",process.env.URL)
+        let update = await usermodel.findByIdAndUpdate(req.params.id, {
             mainHeading: mainHeading,
             secondHeading: secondHeading,
             innerText: innerText,
@@ -101,6 +102,6 @@ exports.updatedata = async (req, res) => {
         res.send({ status: true, message: "Successfully update data", data: update })
 
     } catch (error) {
-        res.send({ status: false, message: "Something went wrong!!" })
+        res.send({ status: false, message: error.message })
     }
 }
