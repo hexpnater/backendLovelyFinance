@@ -65,7 +65,7 @@ exports.geturldata = async (req, res) => {
         const formattedData = data.map((coin) => ({
             name: coin.name,
             price: `${coin.quote.USD.price}`,
-            priceChange: `${coin.quote.USD.percent_change_1h}%`,
+            priceChange: `${coin.quote.USD.percent_change_24h}%`,
             volume: `${coin.quote.USD.volume_24h}`,
             //tvl: `${coin.quotes.volume}`,
         }));
