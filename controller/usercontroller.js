@@ -50,18 +50,6 @@ exports.deletedata = async (req, res) => {
     }
 }
 exports.geturldata = async (req, res) => {
-    // try {
-
-    //     let res = await axios.get('https://coinmarketcap.com/currencies/lovely-inu/').then(resp => {
-    //         console.log(resp.data);
-    //     });
-    //     return
-
-
-
-    // } catch (error) {
-    //     res.send({ status: false, message: "Something went wrong!!" })
-    // }
     try {
 
         const response = await axios.get('https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', {
