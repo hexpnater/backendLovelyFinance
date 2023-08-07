@@ -62,12 +62,18 @@ exports.geturldata = async (req, res) => {
             // },
         });
         const data = response.data.data;
+        let tvl = 0;
         const formattedData = data.map((coin) => ({
+            if(tvl = 0) {
+                const tvlResponse = axios.get(`https://api.defipulse.com/api/v1/defipulse/GetHistory?period=1d&project=${coin.slug}`);
+                const tvlData = tvlResponse.data;
+                tvl = tvlData[0]?.tvl || 0;
+            },
             name: coin.name,
             price: `${coin.quote.USD.price}`,
             priceChange: `${coin.quote.USD.percent_change_24h}%`,
             volume: `${coin.quote.USD.volume_24h}`,
-            //tvl: `${coin.quotes.volume}`,
+            tvl: tvl,
         }));
 
         res.send({ status: true, message: "Successfully get data", details: formattedData })
