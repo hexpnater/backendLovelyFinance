@@ -19,14 +19,15 @@ const upload = multer({
 });
 let userController = require('../controller/usercontroller')
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
-router.post("/add/data"  , upload.single("image") , userController.adddata)
+router.post("/add/data", upload.single("image"), userController.adddata)
 
-router.get("/get/all" , userController.get_all)
+router.get("/get/all", userController.get_all)
 
-router.post("/update/data/:id" , upload.single("image") , userController.updatedata)
+router.post("/update/data/:id", upload.single("image"), userController.updatedata)
 router.delete("/delete/data/:id", userController.deletedata)
+router.get("/geturldata", userController.geturldata)
 
 module.exports = router;
