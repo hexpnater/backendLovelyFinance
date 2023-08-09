@@ -49,29 +49,44 @@ exports.deletedata = async (req, res) => {
 }
 exports.geturldata = async (req, res) => {
     try {
-
-        //const gasPriceBNB = 500000000 / 1e18;
-
-        // Step 3: Fetch the BNB to USD conversion rate from a data provider or exchange API
-        const bnbToUsdRate = 300; // Example rate, should be fetched from a reliable source
-
-        // Step 4: Calculate the gas price in USD
-        //const gasPriceUSD = gasPriceBNB * bnbToUsdRate;
-
-        const response = await axios.get(`https://api.bscscan.com/api?module=account&action=txlist&address=0x9E24415d1e549EBc626a13a482Bb117a2B43e9CF&sort=asc`, {
+        const bnbToUsdRate = 300;
+        const response = await axios.get(`https://api.bscscan.com/api?module=account&action=txlist&address=0x9E24415d1e549EBc626a13a482Bb117a2B43e9CF&page=1&offset=10&sort=asc`, {
             headers: {
                 'apikey': 'K2XHBWECVI7MD74WJQEUTMM431CDFM5F86',
             },
         });
         let data = response.data.result
-        const formattedData = data.map((coin) => {
+        const formattedData = await Promise.all(data.map(async (coin) => {
+            let responsefrom = await axios.get(`https://api.bscscan.com/api?module=contract&action=getsourcecode&address=${coin.from}`, {
+                headers: {
+                    'apikey': 'K2XHBWECVI7MD74WJQEUTMM431CDFM5F86',
+                },
+            });
+            let fromSendnameData = responsefrom.data.result[0];
+            let fromSendname = fromSendnameData ? fromSendnameData.ContractName : 'Unknown Name';
+
+            let responseto = await axios.get(`https://api.bscscan.com/api?module=contract&action=getsourcecode&address=${coin.to}`, {
+                headers: {
+                    'apikey': 'K2XHBWECVI7MD74WJQEUTMM431CDFM5F86',
+                },
+            });
+            let toSendnameData = responseto.data.result[0];
+            let toSendname = toSendnameData ? toSendnameData.ContractName : 'Unknown Name';
             let details = {
                 TxnHash: coin.hash,
-                price: Number(coin.gasPrice/1e18 * bnbToUsdRate).toFixed(7),
-                value: Number(coin.value/1e18 * bnbToUsdRate).toFixed(8)
+                gasprice: Number(coin.gasPrice / 1e18 * bnbToUsdRate).toFixed(7),
+                value: Number(coin.value / 1e18 * bnbToUsdRate).toFixed(8),
+                time: new Date(Number(coin.timeStamp)),
+                fromsend: coin.from,
+                tosend: coin.to
             }
+            details.fromSendname = fromSendname;
+
+            details.toSendname = toSendname;
+
             return details;
-        })
+        }))
+
 
         res.send({ status: true, message: "Successfully get data", formattedData })
     } catch (error) {
